@@ -1,5 +1,6 @@
 require "./lib/album"
 
+
   new_album = Album.new ({:title => 'Warning', :artist => 'Greenday'})
   new_album = Album.new ({:title => 'Dookie', :artist => 'Greenday'})
   new_album = Album.new ({:title => 'The Cost of Living', :artist => 'Jason Webley'})
@@ -8,6 +9,7 @@ require "./lib/album"
 
 
 def main_menu
+  @counter_array = []
   puts "\nPress 'a' to add an album to your collection.\nPress 'l' to list all your albums.\nEnter an artist or title to display all associated albums.\nPress 'x' to exit the program."
     input = gets.chomp
     if input == 'x'
@@ -16,11 +18,7 @@ def main_menu
       add_album
     elsif input == 'l'
       clear_screen
-      counter = 0
-      Album.albums.each do |album|
-        counter += 1
-        puts "#{counter}.  #{album.title} by #{album.artist}\n"
-      end
+      list_albums(Album.albums)
       edit_info
     else
       displayed_albums = []
@@ -50,39 +48,42 @@ def add_album
   main_menu
 end
 
+def list_albums array
+  counter = 0
+  array.each do |album|
+  counter += 1
+  @counter_array << counter
+  puts "#{counter}.  #{album.title} by #{album.artist}\n"
+  end
+end
+
 def edit_info
   puts "\nEnter a number to edit an album's info or enter 'm' to return to the main menu"
   num = gets.chomp
   if num == 'm'
     clear_screen
     main_menu
-  elsif num.match(/\d/).nil?
-    displayed_albums = []
-    clear_screen
-    counter = 0
-    Album.search(num).each do |album|
-      counter += 1
-      displayed_albums << album
-      puts "#{counter}.  #{album.title} by #{album.artist}\n"
-    end
-      if displayed_albums == []
-        puts "That album is not a part of your collection."
+  elsif @counter_array.include?(num.to_i)
+      clear_screen
+      puts "#{Album.albums[num.to_i-1].title} by #{Album.albums[num.to_i-1].artist}"
+      puts "Press 't' to edit the title.  Press 'a' to edit the artist."
+      choice = gets.chomp
+      if choice == 't'
+        puts "Enter your new title"
+        title = gets.chomp
+        Album.albums[num.to_i-1].edit_title(title)
+        puts "Title changed to #{Album.albums[num.to_i-1].title}"
+        main_menu
+      elsif choice == 'a'
+        puts "Enter your new artist"
+        artist = gets.chomp
+        Album.albums[num.to_i-1].edit_artist(artist)
+        puts "Artist changed to #{Album.albums[num.to_i-1].artist}"
+        main_menu
       end
-    edit_info
   else
-    clear_screen
-    current_title = Album.albums[num.to_i-1].title
-    current_artist = Album.albums[num.to_i-1].artist
-    puts "#{current_title} by #{current_artist}"
-    puts "Press 't' to edit the title.  Press 'a' to edit the artist."
-    choice = gets.chomp
-    if choice == 't'
-      Album.albums[num.to_i-1].edit_title
-      puts "Title changed to #{Album.albums[num.to_i-1].title}"
-    elsif choice == 'a'
-      Album.albums[num.to_i-1].edit_artist
-      puts "Artist changed to #{Album.albums[num.to_i-1].artist}"
-    end
+    puts "that's not a valid option. Try again"
+    edit_info
   end
 end
 

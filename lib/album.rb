@@ -29,9 +29,9 @@ class Album
   def Album.search search
     result = []
     @@albums.each do |album|
-      if album.title == search
+      if album.title.downcase == search.downcase
       result << album
-      elsif album.artist == search
+      elsif album.artist.downcase == search.downcase
       result << album
       end
     end
