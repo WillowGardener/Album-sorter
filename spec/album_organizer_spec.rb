@@ -19,14 +19,19 @@ describe Album do
 
   it "add an artist to an existing album" do
     cd = Album.new ({:title => 'Jagged Little Pill'})
-    cd.add_artist("Alanis Morissette")
-    expect(cd.artist.fetch(:artist)).to eq("Alanis Morissette")
+    cd.edit_artist("Alanis Morissette")
+    expect(cd.artist).to eq("Alanis Morissette")
   end
 
   it "add an album title to an existing artist" do
     cd = Album.new ({:artist => "Rilo Kiley"})
-    cd.add_title("Take Offs and Landings")
-    expect(cd.title.fetch(:title)).to eq("Take Offs and Landings")
+    cd.edit_title("Take Offs and Landings")
+    expect(cd.title).to eq("Take Offs and Landings")
   end
 
+  it "finds albums from a given title" do
+    stuff = Album.new ({:title => 'things'})
+    Album.search("things")
+    expect(Album.search("things")).to eq(stuff)
+  end
 end
