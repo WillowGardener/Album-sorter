@@ -31,7 +31,7 @@ describe Album do
 
   it "finds albums from a given title" do
     fred = Album.new ({:title => 'fred', :artist => "burps"})
-    Album.search("fred")
+    Album.search("josh")
     expect(Album.search("fred")).to eq([fred])
   end
 
