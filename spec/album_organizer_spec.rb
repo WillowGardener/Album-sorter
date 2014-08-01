@@ -30,8 +30,20 @@ describe Album do
   end
 
   it "finds albums from a given title" do
-    stuff = Album.new ({:title => 'things'})
-    Album.search("things")
-    expect(Album.search("things")).to eq(stuff)
+    fred = Album.new ({:title => 'fred', :artist => "burps"})
+    Album.search("fred")
+    expect(Album.search("fred")).to eq([fred])
+  end
+
+  it "finds albums from a given artist" do
+    stan = Album.new ({:title => 'stan', :artist => "stuff"})
+    stuff = Album.new ({:title => 'things', :artist => "stuff"})
+    Album.search("stuff")
+    expect(Album.search("stuff")).to eq([stan, stuff])
+  end
+
+  it "lists all of the artists" do
+    Album.artists
+    expect(Album.artists).to eq (["Greenday", "Jason Webley", "Alanis Morissette", "Rilo Kiley", "burps", "stuff"])
   end
 end

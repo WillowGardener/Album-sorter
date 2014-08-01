@@ -1,5 +1,6 @@
 class Album
   @@albums = []
+  @@artists = []
 
   attr_reader :title, :artist
 
@@ -7,6 +8,9 @@ class Album
     @title = attributes[:title] #string
     @artist = attributes[:artist] #string
     @@albums << self
+    if @artist != nil
+      @@artists << @artist
+    end
   end
 
   def Album.albums
@@ -15,6 +19,7 @@ class Album
 
   def edit_artist artist
     @artist = artist
+    @@artists << @artist
   end
 
   def edit_title title
@@ -22,14 +27,19 @@ class Album
   end
 
   def Album.search search
-    result = ""
+    result = []
     @@albums.each do |album|
       if album.title == search
-      result = album
+      result << album
       elsif album.artist == search
-      result = album
+      result << album
       end
     end
     result
   end
+
+  def Album.artists
+    @@artists.uniq
+  end
+
 end
